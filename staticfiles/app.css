@@ -1,0 +1,58 @@
+body {
+    /* Vlaanderen Codex */
+    font-family: 'Inter';
+    font-style: normal;
+    font-size: 16px;
+    color: #333332;
+    margin: 0;
+}
+
+.container-fluid {
+
+    background-color: #FFED00 !important;
+
+}
+
+.bg-body-tertiary {
+    background-color: #FFED00 !important;
+
+}
+
+.container {
+    width: 100%;
+    white-space: nowrap;
+    height: 100px;
+}
+
+/* Vlaanderen Codex */
+.navbar-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000000;
+}
+
+#navbarSupportedContent {
+    justify-content: flex-end !important;
+}
+
+#codexlink {
+    text-decoration: none;
+}
+
+.main_body {
+    margin-top: 40px;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.search-results {
+    margin-top: 10px;
+}
+
+.form-control {
+    width: 50% !important;
+}
+
+.card {
+    width: 50% !important;
+}

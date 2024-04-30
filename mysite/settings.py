@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from neomodel import config
+from dotenv import load_dotenv
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,15 +22,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
+
+env_path = load_dotenv(os.path.join(BASE_DIR, ".env"))
+load_dotenv(env_path)
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-nejy9rjmx!dqt&!lf%5^6fh4v&nzh3+jwjs%oy3o7o+kfxx)ry"
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "awma=b0i3#_j5wrsq#nyc(l&2lb2-q7573bxx7z@4c1s^zu@00",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
 
 ALLOWED_HOSTS = ["*"]
 
-
+SESSION_COOKIE_SECURE = True
 # Application definition
 
 INSTALLED_APPS = [
@@ -58,8 +66,12 @@ MIDDLEWARE = [
 ]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_PRELOAD = True
 
-
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 ROOT_URLCONF = "mysite.urls"
 
 TEMPLATES = [
@@ -135,6 +147,5 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]

@@ -1,0 +1,71 @@
+{% extends 'NetworkApp/index.html' %}
+{% block content %}
+<div class="alert alert-primary" role="alert">Note, you can only use one filter at a time.</div>
+
+
+<form class="search-form">
+    <div class="mb-3">
+        <label for="formGroupExampleInput" class="form-label">Document ID: </label>
+        <input type="text" class="form-control" id="doc_id" name="doc_id" placeholder="e.g. 100001">
+    </div>
+    <div class="mb-3">
+        <label for="formGroupExampleInput2" class="form-label">Year: </label>
+        <input type="text" class="form-control" id="year" name="year" placeholder="e.g. 2022">
+    </div>
+    <div class="mb-3">
+        <label for="formGroupExampleInput2" class="form-label">Document Type: </label>
+        <input type="text" class="form-control" id="type" name="type"
+            placeholder="e.g. Besluit van de Vlaamse Regering">
+    </div>
+    <!-- <input type="submit" value="OK"> -->
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+</form>
+
+
+
+<div class="search-results">
+    {% if context.all_listings %}
+    <h2>Search results: </h2>
+    {% if context.all_listings|length > 1 %}
+    {% for listing in context.all_listings %}
+    <p>here </p>
+    <div class="card">
+        <div class="card-body">
+            <p>
+                <b>Document ID:</b> {{ listing.0 }}
+            </p>
+            <p>
+                <b>About:</b> {{ listing.2 }}
+            </p>
+            <p>
+                <b>Type:</b> {{ listing.1 }}
+            </p>
+            <p><a href="{% url 'doc' listing.0 %}">More details</a></p>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% else %}
+    <p>here2 </p>
+    {{context.all_listings}}
+    <div class="card">
+        <div class="card-body">
+            <p>
+                <b>Document ID:</b> {{ context.all_listings.doc_id }}
+            </p>
+            <p>
+                <b>About:</b> {{ context.all_listings.about }}
+            </p>
+            <p>
+                <b>Type:</b> {{ context.all_listings.type }}
+            </p>
+
+        </div>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="alert alert-warning" role="alert">Based on your filter, no data has been found.</div>
+    {% endif %}
+</div>
+{% endblock %}

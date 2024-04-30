@@ -1,0 +1,15 @@
+{% extends 'NetworkApp/index.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="main_body">
+    <h1>Details for document: <b>{{context.doc.doc_id}}</b> </h1>
+
+    {{ context }}
+
+</div>
+
+
+{% endblock %}

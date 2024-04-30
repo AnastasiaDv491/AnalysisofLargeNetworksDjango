@@ -35,7 +35,10 @@ SECRET_KEY = os.environ.get(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "network-project-test-production.up",
+    "network-project-test-production.up.railway.app",
+]
 
 SESSION_COOKIE_SECURE = True
 # Application definition
@@ -98,12 +101,12 @@ WSGI_APPLICATION = "mysite.wsgi.application"
 
 config.DATABASE_URL = "neo4j+s://neo4j:toCYHqzNaPmxBUXmnWaTBhwh0UgVvv43CkQ-EbcECrQ@737fe39b.databases.neo4j.io:7687"
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
 
 
 # Password validation
@@ -148,4 +151,4 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "NetworkApp/static"),)

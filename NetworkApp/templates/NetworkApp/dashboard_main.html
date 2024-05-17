@@ -4,12 +4,61 @@
 
 {% block content %}
 
-<div class="main_body">
-    <h1>Details for document: <b>{{context.doc.doc_id}}</b> </h1>
+<h1>Details for Document: <b>{{context.doc.doc_id}}</b> </h1>
+<div class="alert alert-success" role="alert">
+    {% if key_rel %}
+    <b>Category(ies): </b>
+    {% for key in key_rel %}
 
-    {{ context }}
+    {{key}},
 
+    {% endfor %}
+    {%else%}
+    <p> No keyword(s)</p>
+    {% endif %}
 </div>
+<div class="card">
+    <div class="card-body">
+        <p>
+            <b>Document ID:</b> {{ context.doc.doc_id }}
+        </p>
+        <p>
+            <b>Publication date (D/M/YYYY): </b>{{ context.doc.day }}/{{ context.doc.month }}/{{ context.doc.year }}
+        </p>
+        <p>
+            <b>About:</b> {{ context.doc.about }}
+        </p>
+        <p>
+            <b>Type:</b> {{ context.doc.type }}
+        </p>
+        <p>
+            {% if art_details %}
+            <b>Contains articles: </b>
+            {% for art_id in art_details %}
+            <a href="{% url 'art' art_id %}">{{art_id}},</a>
+            {% endfor %}
+            {%else%}
+        <p> no articles found</p>
+        {% endif %}
+
+        </p>
+        <p>
+            {%if doc_rel|length > 1 %}
+            <b>Document relationships: </b>
+
+            {% for doc in doc_rel %}
+            <li>{{doc.1}} - {{doc.0}}</li>
+            {% endfor %}
+
+            {%else%}
+        <p> no related documents</p>
+        {% endif %}
+
+        </p>
+
+    </div>
+</div>
+
 
 
 {% endblock %}

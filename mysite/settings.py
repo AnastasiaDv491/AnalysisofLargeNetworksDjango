@@ -33,8 +33,10 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
+DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"  # uncomment is deployment
+# DEBUG = True
 
+# uncomment is deployment
 ALLOWED_HOSTS = [
     "network-project-test-production.up",
     "network-project-test-production.up.railway.app",
@@ -54,6 +56,7 @@ INSTALLED_APPS = [
     "NetworkApp",
     "bootstrap5",
     "django_filters",
+    "matplot",
 ]
 
 MIDDLEWARE = [
@@ -68,6 +71,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
+# uncomment is deployment
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 CSRF_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = False

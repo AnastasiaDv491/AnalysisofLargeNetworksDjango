@@ -1,0 +1,40 @@
+{% extends 'NetworkApp/index.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<h1>Data Statistics</h1>
+
+<ul>
+    <li> Types of documents:</li>
+    {% autoescape off %}
+    {{ doc_type_count }}
+    {% endautoescape %}
+
+    <!-- graph of the types of documents; distribution of docs over the years, avg number of articles and article versions (per doc and article)-->
+
+    <li>Distribution of documents based on their size (# articles): </li>
+    The majority of the documetns contains 4-5 articles. However, there are some outlying documents with more than 70
+    articles.<br>
+    <b> Note: </b> There were many outlying observations above 80, so they were set to 80.
+    <br>
+    To analyze the outliers further, we took the extreme documents (with more than 500 articles).
+    They belonged to the following categories/keywords:
+
+    <ul>
+        {% for i in large_docs %}
+        <li>{{i}}</li>
+        {%endfor%}
+
+    </ul>
+
+
+    {% autoescape off %}
+    {{ plot_art_count }}
+    {% endautoescape %}
+
+</ul>
+
+
+{%endblock%}

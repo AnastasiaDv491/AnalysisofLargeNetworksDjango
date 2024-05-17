@@ -1,0 +1,27 @@
+{% extends 'NetworkApp/index.html' %}
+
+{% load static %}
+
+{% block content %}
+
+
+<h1>Details for Article: <b>{{context.0}}</b> </h1>
+<p> <b>Title: </b>{{context.2}} </p>
+
+<p> <b>Start Date (date of effect, YYYY-MM-DD): </b>
+    {%if context.1 is None%}
+    Not available</p>
+{%else%}
+
+{{context.1}} </p>
+{%endif%}
+
+<p> <b>End Date (date of the end effect, YYYY-MM-DD): </b>
+    {%if context.3 is None%}
+    Not available</p>
+{%else%}
+
+{{context.3}} </p>
+{%endif%}
+
+{%endblock%}

@@ -1,6 +1,5 @@
 {% extends 'NetworkApp/index.html' %}
 {% block content %}
-<div class="alert alert-primary" role="alert">Note, you can only use one filter at a time.</div>
 
 
 <form class="search-form">
@@ -23,13 +22,11 @@
 </form>
 
 
-
 <div class="search-results">
     {% if context.all_listings %}
-    <h2>Search results: </h2>
+    <h3>Search results: </h3>
     {% if context.all_listings|length > 1 %}
     {% for listing in context.all_listings %}
-    <p>here </p>
     <div class="card">
         <div class="card-body">
             <p>
@@ -47,8 +44,7 @@
     {% endfor %}
 
     {% else %}
-    <p>here2 </p>
-    {{context.all_listings}}
+    {{context.all_listings.0}}
     <div class="card">
         <div class="card-body">
             <p>
@@ -60,6 +56,7 @@
             <p>
                 <b>Type:</b> {{ context.all_listings.type }}
             </p>
+            <p><a href="{% url 'doc' context.all_listings.doc_id %}">More details</a></p>
 
         </div>
     </div>

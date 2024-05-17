@@ -2,6 +2,377 @@
 {% load static %}
 
 {% block content %}
-<p>hello</p>
+<h1>Codex Vlaanderen using Neo4j & Django</h1>
+
+<ul class="list-group">
+    <li class="list-group-item">1. Introduction </li>
+    <li class="list-group-item">2. Why? </li>
+    <li class="list-group-item">3. How? </li>
+    <li class="list-group-item">3.1. Neo4j set-up</li>
+    <li class="list-group-item">3.2. Django</li>
+    <li class="list-group-item">3.3. Django with graph databases</li>
+    <li class="list-group-item">4. Analysis</li>
+    <li class="list-group-item">5. Remarks</li>
+
+
+</ul>
+<br>
+<div class="card report-card">
+    <div class="card-header">
+
+    </div>
+    <div class="card-body">
+        <h2 class="card-title">Introduction</h2>
+        <p class="card-text">Codex Vlaanderen is a complete set of Flemish regulations. It was established in 1959.
+            Today, one can find its regulations on the website. It allows you to query the regulations using different
+            filters. Also, for development purposes, Flemish
+            government offers a free Codex API. It allows developers to quickly query Codex without the need for
+            scraping.
+        </p>
+
+    </div>
+</div>
+<br>
+<div class="card report-card">
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+        <h2 class="card-title">Why?</h2>
+        <p class="card-text">Currently Codex is built using SQL database. While this is sufficient for simple querying
+            of the application, e.g. retrieving documents from a certain
+            year, it might not be powerful enough if we want to perform more complex operations. For example, if we were
+            to retrieve relationships of one document, it might take longer
+            using SQL-type database. This is why we wanted to experiment and see whether we can create a similar Codex
+            application using graph-databases.
+            While we will not recreate the application entirely, we will add filtering and display of documents,
+            articles, and article versions. The goal is not to recreate the existing application,
+            but rather to see how we can use the power of a graph-database.
+        </p>
+    </div>
+</div>
+<br>
+<div class="card report-card">
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+        <h2 class="card-title">How? </h2>
+        <p class="card-text">To create the graph-database and front-end, we will use Neo4j and Django, respectively. It
+            provides a friendly user-interface and a straighforward
+            connection with Django Models. Neomodel is a Python package that provides a connection between Neo4j and
+            Django Models. It allows you to specify relationships (edges)
+            and nodes.
+            <br>
+            There are two ways of accessing the database: <b>(1)</b> using <a
+                href="https://neo4j.com/docs/data-importer/current/">Neomodel</a> specification or <b>(2)</b> using
+            Cypher queries directly. The latter is a more flexible option,
+            because it allows you to perform operations, like aggregations, in your queries.
+            In this application we will use the two approaches interchangeably, depending on the use-case.
+        </p>
+    </div>
+</div>
+
+<br>
+
+<div class="card report-card">
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+        <h2 class="card-title">Retrieving data from API </h2>
+        <p class="card-text">To retrive the data from API, we have used Python. The retrieval was done in a sequential
+            way:
+            <li>1. The keywords were retrieved (<b>Attributes: </b> keyword ID, keyword name).</li>
+            <li>2. By using the keywords' IDs, the documents were retrieved (<b>Attributes: </b> document ID, year,
+                month,
+                day, document type).</li>
+            <li>3. The documents' IDs were used to get the relationships between the documents (<b>Attributes: </b>
+                relationship type).</li>
+            <li>4. Articles were retrieved using documents' IDs (<b>Attributes: </b> article ID).</li>
+            <li>5. Article versions were retrieved articles' IDs (<b>Attributes: </b> article version ID, date).</li>
+            <br>
+            <b>Note: </b> throughout the process, we have also established the following (directed) relationships:
+            <li>Document -> Document</li>
+            <li>Document -> Keyword</li>
+            <li> Document -> Year</li>
+            <li> Document -> Month </li>
+            <li>Document -> Day </li>
+            <li>Document -> Article </li>
+            <li>Article -> Article version</li>
+            Interestingly enough, due to the large volume of data, it took sometimes more than 2 hours to process one
+            link from the API.
+            <br>
+            In the end, the network contained the following properties:
+        <ul>
+            <li> Number of nodes:</li>
+            <ul>
+                <li>Number of documents:</li>
+                <li>Number of articles:</li>
+                <li>Number of article versions:</li>
+                <li>Number of keywords:</li>
+            </ul>
+        </ul>
+        <li> Number of edges: </li>
+        </p>
+    </div>
+</div>
+<br>
+<div class="card report-card">
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+        <h2 class="card-title">Neo4j Set-Up </h2>
+        <p class="card-text">
+            To set up graph-database, we used <a href="https://neo4j.com/docs/data-importer/current/">Data importer of
+                Neo4j </a>. There one can specify
+            the graph model and create the graph using <samp>csv</samp> format. The final data model was:
+            <br>
+            <img src="{% static 'diagram1.png' %}" alt="diagram" with="500" height="500">
+            <br>
+            The connection to Neo4j server is established in the <samp>settings.py</samp> file via
+            <samp>config.DATABASE_URL</samp> and <samp>.env</samp> that contains the secret key.
+            Since the application was deployed, we did not make the key public.
+        </p>
+    </div>
+</div>
+<br>
+<div class="card report-card">
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+        <h2 class="card-title">Django </h2>
+        <p class="card-text">
+            Django is a Python web-framework. In our case, as mentioned before, the back-end is based on the
+            graph-database and front-end is built using <samp>HTML, CSS, and Bootstrap</samp>.
+            The application contains multiple pages:
+            <li>Search - page where the main dashboard is displayed.</li>
+            <li>Statistics - some summary measures of the networks.</li>
+            <li>About the project - the main report of the project.</li>
+
+        </p>
+    </div>
+</div>
+<br>
+<div class="card report-card">
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+        <h2 class="card-title">Django with Graph Databases </h2>
+        <p class="card-text">
+            To query the database and return the data to front-end, we use <samp>views.py</samp>. The functions contain
+            varios quries in Cypher, and the results are processed
+            in Python. To deploy this application no extra things needed to be done.
+        </p>
+    </div>
+</div>
+<br>
+<div class="card report-card">
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+        <h2 class="card-title">Analysis </h2>
+        <p class="card-text">
+            Besides developing Neo4j+Django application, we have also ran an analysis on the database. A document has a
+            keyword which characterizes the domain/theme it
+            belongs to. Our goal was to perform community detection on document nodes and see whether we can reproduce
+            keyword communities by only relying on graph topology. Documents belonging to the same keyword are more
+            likely
+            to be connected.
+
+            To do this we have ran multiple community detection algorithms: multi-level Louvain, Random Walk, Leading
+            Eigenvector, and Leiden algorithm. The resolution parameter was set to 1.3 in all methods. For the random
+            walk, we have used 50 steps.
+
+            <br>
+        <h2>Results</h2>
+        Below are the results of the algorithms. As we can see, Louvain and Random walk find more or less similar number
+        of clusters. While Leiden algorithm finds more clusters than
+        there are keywords.
+        <table class="table report-table">
+            <thead>
+                <tr>
+                    <th scope="col">Algorithm</th>
+                    <th scope="col">Number of clusters</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Multi-level Louvain</th>
+                    <td>56</td>
+
+                </tr>
+                <tr>
+                    <th scope="row">Random walk</th>
+                    <td>130</td>
+
+                </tr>
+                <tr>
+                    <th scope="row">Leading Eigenvector</th>
+                    <td colspan="2"><b>Did not converge</b></td>
+                </tr>
+                <tr>
+                    <th scope="row">Leiden</th>
+                    <td>7881</td>
+
+                </tr>
+            </tbody>
+        </table>
+        <br> Next, we have compared the communities using Normalized Mutual Information (NMI). The higher NMI, the more
+        alike the communities are. As we can see, indeed, Louvain and Random
+        Walk communities are more alike.
+        <table class="table report-table">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">NMI</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Multi-level Louvain versus Random walk</th>
+                    <td>0.76</td>
+
+                </tr>
+                <tr>
+                    <th scope="row">Multi-level Louvain versus Leiden</th>
+                    <td>0.58</td>
+
+                </tr>
+                <tr>
+                    <th scope="row">Random Walk versus Leiden</th>
+                    <td>0.58</td>
+                </tr>
+            </tbody>
+        </table>
+
+        It is important to validate the results of the models. In our case, we want to know whether the algorithms were
+        able to reproduce the sorting of the documents based on keywords. In ideal scenario, we would
+        expect that one cluster corresponds to one keyword. However, there are two possible deviations: <b>(1)</b>
+        keywords may belong to multiple clusters and <b>(2)</b> clusters may contain documents from more than
+        one keyword. Hence, for each of the three methods we have calculated the number of unique cluster-keyword
+        combinations (we want to maximize this), number of keywords that belong to more than one cluster, and
+        proportion of clusters that contain documents from more than one keyword.
+        <table class="table report-table">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Multi-level Louvain</th>
+                    <th scope="col">Random Walk</th>
+                    <th scope="col">Leiden</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Number of unique keyword-cluster pairs</th>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>2</td>
+                </tr>
+                <tr>
+                    <th scope="row">Proportion of clusters with more than 1 keyword</th>
+                    <td>0.95</td>
+                    <td>0.76</td>
+                    <td>0.09</td>
+
+                </tr>
+                <tr>
+                    <th scope="row">Number of keywords that are in more than one cluster</th>
+                    <td>166</td>
+                    <td>171</td>
+                    <td>183</td>
+                </tr>
+            </tbody>
+        </table>
+        Based on the results above, we see that all algorithm are bad at mapping clusters to keywords (in a unique way).
+        Random walk and Leiden are slightly better at it than Louvain. However, they also
+        have more clusters which might explain this observation. Among the three algorithms, Louvain is the worst one in
+        terms of proportion of clusters that contain
+        more than one keyword. It seems to group a lot of keywords in one cluster. On the other hand, Leiden tends to
+        allocate the same keywords to multiple clusters
+        which could signal its inability to properly isolate topics (keywords).
+        </p>
+        <p>
+            While none of the algorithms can
+            capture the exact structure of the keywords, we will proceed with Random
+            walk results. It was able to identify one keyword-cluster pair, and it did not have
+            large proportion of clusters with more than one unique keyword.
+        </p>
+        <p>
+            As the final part of the analysis, we wanted to further understand why all algorithms were bad at
+            reproducing
+            the original sorting of documents based on keywords. One explanation could be that the topics/keywords
+            are closely related to each other. Meaning, Codex might have provided very detailed classification of
+            documents,
+            while the algorithms are reproducing a more global structure. For example, keywords "onderwijs"
+            and "lagere onderwijs" are different topics for Codex, but for the algorithms, they are part of the same
+            cluster. Another explanation could be that topology alone cannot group documents of similar topic, which
+            means our algorithms
+            group unrelated topics/keywords. <br>
+            To investigate this, we have used Wordcloud to visualize the words in a cluster. To only focus on the
+            important/
+            meaningful words, we have removed Dutch stopwords using <a
+                href="https://countwordsfree.com/stopwords/dutch">
+                this list </a>.
+
+            Next, we visualize the results of clusters 0,1, and 24, which were randomly selected.
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Cluster</th>
+                    <th scope="col">Wordcloud</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">0</th>
+                    <td><img src="{% static 'rw_cluster0.png' %}" alt="cluster0" width="400" height="200"></td>
+
+                </tr>
+                <tr>
+                    <th scope="row">1</th>
+                    <td><img src="{% static 'rw_cluster1.png' %}" alt="cluster1" width="400" height="200"></td>
+                </tr>
+                <tr>
+                    <th scope="row">24</th>
+                    <td><img src="{% static 'rw_cluster24.png' %}" alt="cluster24" width="400" height="200"></td>
+                </tr>
+            </tbody>
+        </table>
+        <br> Based on the content of the word clouds, we can see that clusters are, indeed,
+        somewhat homogeneous. For example, cluster 0 contains topics about education (onderwijs, leerlingenbegeleiding,
+        onderwijspersoneel, student). The content of cluster 1 seems to be more infrastructure oriented (
+        landbouw, archeologisch, agro, waterbonden). Finally, cluster 24 describes more
+        environemental topics (afval, natuurbehoud, wildbeheer).
+
+        While the clusters are not perfect. Some contain totally unrelated topics, like cluster 24 contains "arab".
+        But we can see that many words are related to the same overarching theme. This suggests that the algoirthms find
+        more "global" structure,
+        which is less granular than that of Codex.
+        </p>
+    </div>
+</div>
+<br>
+<div class="card report-card last-card">
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+        <h2 class="card-title">Remarks</h2>
+        <p class="card-text">
+            Due to technical and time limitations, there were short-comings in the project.
+            <br>
+            Since we were using a free-tier in Neo4j, we could only build a graph with 200,000 nodes and 200,000
+            edges. Hence, our graph is rather a sub-graph of the
+            complete Codex network.
+            Also, more information could have been scraped. For example, the API also contained "Chapters" and "Themes".
+            However, for this scope
+            they did not add useful information, and the size of the network was already maxed out.
+            Finally, we were also limited by the free-tier option in what analysis we could perform. Hence, community
+            detection was performed using <samp>IGraph</samp> package.
+            The results were added as attributes to document nodes. A better way of doing it would have been to use
+            Neo4j directly. However, this requires <samp>Graph Data Science</samp>
+            library which was not available in free tier.
+
+        </p>
+    </div>
+</div>
 
 {% endblock %}

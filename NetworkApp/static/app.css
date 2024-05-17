@@ -41,8 +41,8 @@ body {
 
 .main_body {
     margin-top: 40px;
-    margin-left: 40px;
-    margin-right: 40px;
+    margin-left: 60px;
+    margin-right: 60px;
 }
 
 .search-results {
@@ -55,4 +55,44 @@ body {
 
 .card {
     width: 50% !important;
+}
+
+.alert-success {
+    width: 25% !important;
+}
+
+.list-group {
+    width: 25% !important;
+
+}
+
+.report-card {
+    width: 70% !important;
+}
+
+.report-table {
+    width: 50% !important;
+
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #FFED00 !important;
+    color: white;
+    text-align: center;
+}
+
+.flex-shrink-0 {
+    margin-bottom: 20px !important;
+}
+
+.footer-p {
+    color: black;
+}
+
+.last-card {
+    margin-bottom: 100px !important;
 }

@@ -1,0 +1,29 @@
+{% extends 'NetworkApp/index.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<h1>Details for Article: <b>{{context.0}}</b> </h1>
+
+<p>
+    Contains {{version|length}} versions
+</p>
+<p>
+    <b>Article versions: </b>
+    {% if version|length > 1 %}
+    {% for v in version %}
+
+    <a href="{% url 'art_v_id' v.0 %}">{{version.0.0}},</a>
+    {% endfor %}
+
+    {%else%}
+<div class="alert alert-danger" role="alert">
+    <b>We do not have further details on this Article. </b>
+</div>
+
+{% endif %}
+
+</p>
+
+{%endblock%}

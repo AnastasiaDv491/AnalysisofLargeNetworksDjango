@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     "NetworkApp",
     "bootstrap5",
     "django_filters",
-    "matplot",
 ]
 
 MIDDLEWARE = [

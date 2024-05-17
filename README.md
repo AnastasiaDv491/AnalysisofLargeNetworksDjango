@@ -8,3 +8,8 @@ If you want to run the app locally, follow the steps:
 3. In the terminal run `python manage.py runserver`
 4. Follow the URL to access to app locally.
 
+Below you can fnd the description of every page:
+1. Search: contains the main dashboard menu
+2. Statistics: contains some brief summary statistics about the data used
+3. About the project: contains the main report on the project
+4. Codex: reference to Codex website from which the database was created
